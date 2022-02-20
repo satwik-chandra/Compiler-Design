@@ -33,6 +33,11 @@ public static void main(String[] args) throws FileNotFoundException, IOException
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f]
+Numbers = [0-9]+(".")?[0-9]*
+Mathoperators = ("++" | "--" | "+" | "-" | "*" | "/" | "=")*
+Brackets = [(){}]*
+Functionsarray = ("main" | "printf" | "scanf")*
+Keywordsarray = ("int" | "float" | "double" | "if" | "else" | "for" | "return" | "include")*
 
 Identifier = [:jletter:] [:jletterdigit:]*
 
@@ -41,14 +46,26 @@ Identifier = [:jletter:] [:jletterdigit:]*
 
 %%
 <YYINITIAL> {
+/* function */
+{Functionsarray}               { return new Yytoken("function"); } 
+
+/* Keyword */
+{Keywordsarray}                { return new Yytoken("keyword"); }
+
 /* identifiers */
-{Identifier}                   { return new Yytoken("IDENTIFIER"); }
+{Identifier}                   { return new Yytoken("identifier"); }
 
 /* literals */
 \"                             { stringBuffer.setLength(0); yybegin(STRING); }
 
-/* operators */
-"="                            { return new Yytoken("EQ"); }
+/* brackets */
+{Brackets}                     { return new Yytoken("brackets"); } 
+
+/* Math operators */
+{Mathoperators}                { return new Yytoken("operator"); }
+
+/* numbers */
+{Numbers}                      { return new Yytoken("number"); }
 
 /* whitespace */
 {WhiteSpace}                   { return new Yytoken("space"); }
@@ -56,7 +73,7 @@ Identifier = [:jletter:] [:jletterdigit:]*
 
 <STRING> {
 \"                             { yybegin(YYINITIAL);
-                               return new Yytoken("STRING_LITERAL",
+                               return new Yytoken("String",
                                stringBuffer.toString()); }
 [^\n\r\"\\]+                   { stringBuffer.append( yytext() ); }
 \\t                            { stringBuffer.append('\t'); }
