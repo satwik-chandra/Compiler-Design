@@ -68,5 +68,5 @@ Identifier = [:jletter:] [:jletterdigit:]*
 }
 
 /* error fallback */
-[^]                              { throw new Error("NOT A VALID PROGRAM"+
+[^]                              { throw new Error("ERROR: Invalid Token "+
                                                 yytext()+">"); }
