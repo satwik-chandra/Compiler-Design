@@ -1,14 +1,14 @@
-clone repo
+clone repo/ download file
 
 install java, flex and jflex on your machine
 
 steps:
 cd Compiler-Design
 
-jflex test.flex
+jflex toy.flex
 
 javac Yylex.java
 
 java Yylex input.txt
 
-It should then output what types are in input.txt ( only identifiers, = and strings so far(working on this))
+It should then output valid types that are in input.txt
