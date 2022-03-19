@@ -46,7 +46,7 @@ Numbers = [0-9]+(".")?[0-9]*
 Mathoperators = ("++" | "--" | "+" | "-" | "*" | "/" | "=")*
 Brackets = [(){}]*
 Functionsarray = ("main" | "printf" | "scanf")*
-Keywordsarray = ("int" | "float" | "double" | "if" | "else" | "for" | "return" | "include")*
+Keywordsarray = ("bool" | "int" | "true" | "false" | "void" | "printf" | "string" | "and" | "struct" | "if" | "then"| "else" | "for" | "return" | "mod" | "or")*
 Identifier = [:jletter:] [:jletterdigit:]*
 
 
@@ -93,4 +93,4 @@ Identifier = [:jletter:] [:jletterdigit:]*
 }
 
 /* error token */
-[^]                              { return new Yytoken("error"); } //return new Yytoken("ERROR: Invalid Token here -> "+ yytext()); }
+[^]                              { return new Yytoken("ERROR: "+ yytext()); } //return new Yytoken("ERROR: Invalid Token here -> "+ yytext()); }
