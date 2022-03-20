@@ -12,3 +12,7 @@ javac Yylex.java
 java Yylex input.txt
 
 It should then output valid types that are in input.txt
+
+To start parsing:
+Command:- java -jar java-cup-11b.jar parser.cup  input.txt
+
