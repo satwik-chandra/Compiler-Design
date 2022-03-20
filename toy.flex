@@ -17,6 +17,7 @@ class Yytoken {
 %%
 
 %unicode
+%cup
 
 %{
 StringBuffer stringBuffer = new StringBuffer();
@@ -28,7 +29,7 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     while ((t = yy.yylex()) != null){
       //System.out.println(t.type);
       if(t.type == "error"){
-         System.out.println("Error token");
+         System.out.println("Error");
          //valid = true; 
        }
        else{
@@ -46,7 +47,7 @@ Numbers = [0-9]+(".")?[0-9]*
 Mathoperators = ("++" | "--" | "+" | "-" | "*" | "/" | "=")*
 Brackets = [(){}]*
 Functionsarray = ("main" | "printf" | "scanf")*
-Keywordsarray = ("int" | "float" | "double" | "if" | "else" | "for" | "return" | "include")*
+Keywordsarray = ("bool" | "int" | "true" | "false" | "void" | "printf" | "string" | "and" | "struct" | "if" | "then"| "else" | "for" | "return" | "mod" | "or")*
 Identifier = [:jletter:] [:jletterdigit:]*
 
 
@@ -93,4 +94,4 @@ Identifier = [:jletter:] [:jletterdigit:]*
 }
 
 /* error token */
-[^]                              { return new Yytoken("error"); } //return new Yytoken("ERROR: Invalid Token here -> "+ yytext()); }
+[^]                              { return new Yytoken("ERROR: "+ yytext()); } //return new Yytoken("ERROR: Invalid Token here -> "+ yytext()); }
