@@ -17,6 +17,7 @@ class Yytoken {
 %%
 
 %unicode
+%cup
 
 %{
 StringBuffer stringBuffer = new StringBuffer();
@@ -28,7 +29,7 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     while ((t = yy.yylex()) != null){
       //System.out.println(t.type);
       if(t.type == "error"){
-         System.out.println("Error token");
+         System.out.println("Error");
          //valid = true; 
        }
        else{

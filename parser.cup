@@ -1,0 +1,11 @@
+import java_cup.runtime.*;
+
+terminal LineTerminator, WhiteSpace, Numbers, Mathoperators, Brackets, Functionsarray, Keywordsarray, Identifier;
+non terminal expr_list, expr, op, type, return_type,declaration,proc, stmt, pgm;
+
+start with expr_list;
+
+
+expr_list ::= expr_list expr
+		| expr;
+
