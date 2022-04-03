@@ -13,7 +13,7 @@ import java.io.IOException;
 
 LineTerminator = \r|\n|\r\n
 Numbers = \d+\.?\d*
-Alpha = [a-zA-Z]
+Letters = [a-zA-Z]
 Digit = [0-9]
 WhiteSp  = [\040\ n]
 InputCharacter = [^\r\n]
@@ -23,7 +23,7 @@ OpenBracket = "("
 CloseBracket = ")"
 COpenBracket = "{"
 CCloseBracket = "}"
-SemiC = ";"
+SemiColon = ";"
 Less = "<"
 Greater = ">"
 EQUIV = "=="
@@ -60,7 +60,7 @@ BoolVar = {True}|{False}
 Quotes = [\042]
 StringVar = {Quotes} {InputCharacter}* {Quotes}
 
-Declaration = {Type} {Word}
+Declaration = {Type} {Word} 
 
 Compare = {Less} | {Greater} | {LessEQU} | {GreaterEQU} | {EQUIV} | {NotEQU}
 Comparison = ({Word} | {Numbers}) {Compare} ({Word} | {Numbers})
@@ -69,10 +69,8 @@ Operator = {Plus} | {Minus}
 
 ReturnType = {Type}|{Void}
 
-
-
-IdentifierCharacter = {Alpha} | {Digit}
-Word = {Alpha}{IdentifierCharacter}*
+IdentifierCharacter = {Letters} | {Digit}
+Word = {Letters}{IdentifierCharacter}*
 
 %{
  List<String> tokens = new ArrayList();
@@ -163,7 +161,7 @@ Word = {Alpha}{IdentifierCharacter}*
                 error = true;
             }
         }
-        else if(tokens.get(i).contentEquals("SEMIC")) {
+        else if(tokens.get(i).contentEquals("SEMICOLON")) {
             state = "Null";
         }
         else {
@@ -180,7 +178,7 @@ Word = {Alpha}{IdentifierCharacter}*
 
 %%
 {Type} {tokens.add("TYPE");}
-{SemiC} {tokens.add("SEMIC");}
+{SemiColon} {tokens.add("SEMICOLON");}
 {EQU} {tokens.add("EQU");}
 {StringVar} {tokens.add("STRINGVAR");}
 {BoolVar} {tokens.add("BOOLVAR");}

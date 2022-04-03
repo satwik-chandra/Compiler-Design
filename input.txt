@@ -1,1 +1,1 @@
-int x = 6y78
+printf("mikey)
