@@ -7,7 +7,7 @@ cd Compiler-Design
 
 jflex toy.flex
 
-javac Yylex.java
+javac Lexer.java
 
 java Yylex input.txt
 

@@ -1,0 +1,48 @@
+
+import java_cup.runtime.*;
+
+terminal LineTerminator, WhiteSpace, Numbers, Mathoperators, Brackets, Functionsarray, Keywordsarray, Identifier;
+non terminal expr_list, expr, op, type, return_type,declaration,proc, stmt, pgm;
+
+start with expr_list;
+
+
+expr_list ::= expr_list expr
+		| expr;
+
+exp ::= <int-literal>
+		| <string-literal>
+		| true
+		| false
+		| - <exp>
+		| ! <exp>
+		| <l-exp>
+		| ( <exp> )
+
+<op> ::= + |- | * | / | mod | and | or | == | > | < | >= | <= | !=
+
+<type> ::= int | bool | string | <id>
+<return-type> ::= <type> | void
+<struct> ::= struct <id> { <declaration>, <declaration>,... }
+
+<declaration> ::= <type> <id>
+<proc> ::= <return-type> <id> ( <declaration>,... ) { <statement> }
+
+<stmt> ::= for (<id> = <expr>; <expr> ; <statement>) <statement>
+		| if (<expr>) then <statement>
+		| if (<expr>) then <statement> else <statement>
+		| printf (<string>);
+		| return <expr>;
+		| { <statement-seq> } 
+		| <type> <id>;
+		| <l-exp> = <expr>;
+		| <id>(<expr>,...);
+		| id = <id>(<expr>,...);
+
+<statement-seq> ::=
+					| <stmt> <statement-seq>
+
+<l-exp> ::= <id> | <id> . <l-exp>
+
+<pgm> ::= <proc> <pgm`> | <struct> <pgm>
+<pgm`> ::= # empty sequence | <proc> <pgm`> | <struct> <pgm`>
