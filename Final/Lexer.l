@@ -1,40 +1,90 @@
+%option noyywrap
+ 
 %{
-
-
-
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include "symtab.h"
+	#include "parser.tab.h"
+	extern FILE *yyin;
+	extern FILE *yyout;
+ 
+	int lineno = 1; // initialize to 1
+	void ret_print(char *token_type);
+	void yyerror();
 %}
+ 
+%x ML_COMMENT
+ 
+alpha 		[a-zA-Z]
+digit 		[0-9]
+alnum 		{alpha}|{digit}
+print		[ -~]
+ 
+ID 			{alpha}+{alnum}*
+ICONST		"0"|[0-9]{digit}*
 
-RESERVED = bool|int|true|false|void|printf|string|and|struct|if|then|else|for|return|mod|or
-ID = [a-zA-Z][a-zA-Z0-9]*
-INTEGER = [+-]?[0-9]+
-STRING = \"(\\.|[^"\\])*\"
-WHITESPACENL = [ \t\n\r]*
-SYMBOLS  {|}|;|<|>|==|<=|>=|*|!=|!|(|)|+|-|.|=|/
-
-/*The above definitons dont work for some weird reason*/
-/*The below grammer will be changed to return the token to parser later*/
-/*At the moment, String doesnt work, can't really figure out how to make the regular expression*/
-
+STRING		\"{print}*\"
+ 
 %%
+ 
+"//".*					{ printf("Eat up comment at line %d\n", lineno); } 
+ 
 
+"int"|"INT"				{ return INT; }
+"if"|"IF"				{ return IF; }
+"else"|"ELSE"			{ return ELSE; }
+"for"|"FOR"				{ return FOR; }
+"void"|"VOID"			{ return VOID; }
+"return"|"RETURN"		{ return RETURN; }
+"bool" | "BOOL"			{ return BOOL; }
+"true" | "TRUE"         {return TRUE ; }
+"false" | "FALSE"       {return FALSE ;} 
+ 
+"+"|"-"					{ return ADDOP; }
+"*"						{ return MULOP; }
+"/"						{ return DIVOP; }
+"||"					{ return OROP; }
+"!"						{ return NOTOP; }
+"=="|"!="				{ return EQUOP; }
+">"|"<"|">="|"<="		{ return RELOP; }
+ 
+ 
+"("				{ return LPAREN; }
+")"				{ return RPAREN; }
+"{"				{ return LBRACE; }
+"}"				{ return RBRACE; }
+";"				{ return SEMI; }
+"."				{ return DOT; }
+"="				{ return EQUAL; }
 
-bool|int|true|false|void|printf|string|and|struct|if|then|else|for|return|mod|or {printf("Valid RESERVED: %s\n", yytext);} //Keywords
-[a-zA-Z][a-zA-Z0-9]* {printf("Valid ID: %s\n", yytext);} //Identifier
-([^\\\"]|\\.)* {printf("Valid STRING: %s\n", yytext);} //String{Not working perfectly, needs to be edited PENDING TASK}
-[+-]?[0-9]+ {printf("Valid INTEGER: %s\n", yytext);} //Integers, + && -
-\{|\}|;|<|>|==|<=|>=|\*|!=|!|\(|\)|\+|-|.|=|\\ {printf("Valid SYMBOL: %s\n", yytext);} //All the symbols
-[ \t\n\r]* 
-. {printf("Invalid\n");}
-
-
+ 
+ 
+{ID} 			{
+					// insert identifier into symbol table
+					insert(yytext, strlen(yytext), UNDEF, lineno);
+					return ID;
+				}
+{ICONST} 				{
+					return ICONST; 
+				}
+		/*
+		/ {ICONST} 		{ double temp = strtod(yytext());
+		// 					if(temp > 32767 || temp < -32768)
+		// 						{
+		// 							return ERRORINT ;
+		// 						}
+		// 					else
+		// 						{
+		// 							return ICONST; 
+		// 						}
+		*/			
+{STRING} 		{ return STRING; }
+ 
+ 
+"\n"			{ lineno += 1; }
+[ \t\r\f]+			/* eat up whitespace */
+ 
+.				{ yyerror("Unrecognized character"); }
+ 
 %%
-
-int yywrap(){}
-int main(){
-    FILE *fp;
-    fp = fopen("input.txt","r");
-    yyin = fp;
-    yylex();
-} 
-//Additional C code
-

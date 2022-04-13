@@ -1,5 +1,4 @@
-**DO THE BELOW IN WSL, OR IN A LINUX COMPUTER WITH FLEX/BISON INSTALLED**
-To run the Lexer:
-    1. flex Lexer.l
-    2. gcc lex.yy.c
-    3. /.a.out
+bison -d parser.y
+flex lexer.l
+gcc -o a parser.tab.c lex.yy.c 
+./a input.txt
