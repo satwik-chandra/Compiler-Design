@@ -4,50 +4,63 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
-	#include "symtab.h"
+	#include "ToY.h"
 	#include "parser.tab.h"
 	extern FILE *yyin;
 	extern FILE *yyout;
  
-	int lineno = 1; // initialize to 1
 	void ret_print(char *token_type);
 	void yyerror();
 %}
  
 %x ML_COMMENT
  
-alpha 		[a-zA-Z]
-digit 		[0-9]
-alnum 		{alpha}|{digit}
-print		[ -~]
- 
-ID 			{alpha}+{alnum}*
-ICONST		"0"|[0-9]{digit}*
+Int				  [0-9]
+DecInt 	   		  [1-9]{Int}* 
+MinusInt   		  [-]({Int}|{DecInt})
+Integer   		  {Int}|{DecInt}|{MinusInt}
 
-STRING		\"{print}*\"
+Comment    	   	  ([//]|[##])
+
+LineTerminator    \r|\n|\r\n
+WhiteSpace        [\t\f]
+
+Alpha 			  [a-zA-Z_]
+Alnum			  {Alpha}|{Int}
+Identifier        {Alpha}+{Alnum}*
+
+String 			  \"([^"\\])*\"
  
 %%
  
-"//".*					{ printf("Eat up comment at line %d\n", lineno); } 
+{Comment}				{ } 
  
 
-"int"|"INT"				{ return INT; }
-"if"|"IF"				{ return IF; }
-"else"|"ELSE"			{ return ELSE; }
-"for"|"FOR"				{ return FOR; }
-"void"|"VOID"			{ return VOID; }
-"return"|"RETURN"		{ return RETURN; }
-"bool" | "BOOL"			{ return BOOL; }
-"true" | "TRUE"         {return TRUE ; }
-"false" | "FALSE"       {return FALSE ;} 
+"struct"			    { return STRUCT;} 
+"int"					{ return INTEGER; }
+"bool"					{ return BOOL; }
+"string"				{ return STRING; }
+"true"			        { return TRU; }
+"false"			        { return FAL;} 
+"for"					{ return FOR; }
+"if"					{ return IF; }
+"then"					{ return THEN; }
+"else"					{ return ELSE; }
+"void"					{ return VOID; }
+"return"				{ return RETURN; }
+"printf"			    { return PRINT;} 
  
-"+"|"-"					{ return ADDOP; }
-"*"						{ return MULOP; }
-"/"						{ return DIVOP; }
-"||"					{ return OROP; }
-"!"						{ return NOTOP; }
-"=="|"!="				{ return EQUOP; }
-">"|"<"|">="|"<="		{ return RELOP; }
+"+"						{ return ADDOPERATOR; }
+"-"						{ return SUBOPERATOR; }
+"*"						{ return MULOPERATOR; }
+"/"						{ return DIVOPERATOR; }
+"or"					{ return OROPERATOR; }
+"not"|"!"				{ return NOTOPERATOR; }
+"and"					{ return ANDOPERATOR; }
+"mod"					{ return MODOPERATOR; }
+"=="|"!="				{ return EQUOPERATOR; }
+">"|"<"|">="|"<="		{ return RELOPERATOR; }
+","						{ return COMMA; }
  
  
 "("				{ return LPAREN; }
@@ -58,33 +71,50 @@ STRING		\"{print}*\"
 "."				{ return DOT; }
 "="				{ return EQUAL; }
 
- 
- 
-{ID} 			{
+{LineTerminator}	    { yylineno++; } 
+{WhiteSpace}            { /* ignore */ }
+
+{Integer} 		{
+						yylval = atoi(yytext) ;
+						if(  yylval > 32767 )
+						{
+							yyerror("ERROR: Integer OOB") ;
+				//			return INVALID;
+							
+						}
+						else if (yylval < -32768){
+							yyerror("ERROR: Integer OOB") ;
+				//			return INVALID;
+						}
+						else
+						{
+							return ICONST; 
+						} 
+				}
+
+{String} 		{ 
+					int present = 0;
+					for(int i = 0; yytext[i] != '\0'; i++)
+				  	{
+						if(yytext[i] == '\\')
+							present = 1;
+				  	}
+					if(present == 1)
+						yyerror("ERROR: STRING OOB");
+					//	return INVALID;
+					else
+					{
+                    	return SCONST; 
+					} 
+				}
+
+{Identifier} 			{
 					// insert identifier into symbol table
-					insert(yytext, strlen(yytext), UNDEF, lineno);
+					insert(yytext, strlen(yytext), UNDEF, yylineno);
 					return ID;
 				}
-{ICONST} 				{
-					return ICONST; 
-				}
-		/*
-		/ {ICONST} 		{ double temp = strtod(yytext());
-		// 					if(temp > 32767 || temp < -32768)
-		// 						{
-		// 							return ERRORINT ;
-		// 						}
-		// 					else
-		// 						{
-		// 							return ICONST; 
-		// 						}
-		*/			
-{STRING} 		{ return STRING; }
- 
- 
-"\n"			{ lineno += 1; }
-[ \t\r\f]+			/* eat up whitespace */
- 
+
+
 .				{ yyerror("Unrecognized character"); }
- 
+
 %%

@@ -1,5 +1,5 @@
 %{
-	#include "symtab.c"
+	#include "ToY.c"
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
@@ -9,77 +9,119 @@
 	extern int yylex();
 	void yyerror();
 %}
- 
+//a lot to do here
+
+
 /* token definition */
-%token INT IF THEN ELSE FOR  VOID RETURN BOOL
-%token ADDOP MULOP DIVOP  OROP NOTOP EQUOP RELOP
-%token LPAREN RPAREN LBRACE RBRACE SEMI DOT COMMA ASSIGN EQUAL
-%token ID ICONST  STRING
- 
+%token NOTOPERATOR
+%token ADDOPERATOR SUBOPERATOR 
+%token RELOPERATOR
+%token EQUAL EQUOPERATOR
+
+%token MULOPERATOR DIVOPERATOR  OROPERATOR  ANDOPERATOR MODOPERATOR
+%token INTEGER IF THEN ELSE FOR  VOID RETURN BOOL TRU FAL STRUCT
+%token LPAREN RPAREN LBRACE RBRACE SEMI DOT COMMA PRINT
+%token ID ICONST STRING SCONST
+
+%left NOTOPERATOR SUBOPERATOR ADDOPERATOR  MULOPERATOR DIVOPERATOR 
+%nonassoc EQUOPERATOR RELOPERATOR
+%left DOT
+
 %start program
  
 /* expression priorities and rules */
  
 %%
  
-program: declarations statements ;
+program: procedure_declarations ;
  
-declarations: declarations declaration | declaration;
- 
-declaration: type names SEMI ;
- 
-type: INT | VOID;
- 
-names: ID | names COMMA ID;
- 
-statements: statements statement | statement;
+procedure_declarations: procedure_declaration procedure_declarations |  ;
+
+procedure_declaration: 
+	return_type ID LPAREN declarations_p LBRACE statements RBRACE | 
+	return_type ID LPAREN RPAREN LBRACE statements RBRACE |
+	STRUCT ID LBRACE declarations_s 
+;
+
+procedure_calls: 
+	ID LPAREN expressions RPAREN SEMI | 
+	ID EQUAL ID LPAREN expressions RPAREN SEMI 
+;
+
+type: INTEGER | STRING | BOOL;
+
+declaration: type ID SEMI;
+
+declarations_p: declaration_p COMMA declarations_p | declaration_p RPAREN;
+declarations_s: declaration_p COMMA declarations_s | declaration_p RBRACE;
+
+declaration_p: type ID;
+
+statements: statement statements | ;
  
 statement:
-	if_statement | for_statement | assigment |
-	| RETURN SEMI
-;
+	if_statements | for_statement | assignment | prints | declaration | procedure_calls
+	| RETURN returns SEMI 
+
+prints: PRINT LPAREN SCONST RPAREN SEMI ;
+
+returns:
+	ID | ICONST | SCONST | VOID | ;
+
+return_type:
+	INTEGER | STRING | BOOL | VOID;
+
+assignment:  ID EQUAL VOID SEMI | ID EQUAL expression SEMI ; 
+
+lexp : ID | ID DOT ID | 
+
+if_statements: if_statements if_statement | ;
+
+if_statement: IF LPAREN bool_exp RPAREN THEN LBRACE statements RBRACE else_part;
  
-if_statement: IF LPAREN expression RPAREN tail else_if_part else_part ;
+else_part: ELSE LBRACE statements RBRACE | ; 
  
-else_if_part: 
-	else_if_part ELSE IF LPAREN expression RPAREN tail |
-	ELSE IF LPAREN expression RPAREN tail  |
-	/* empty */
-; 
-else_part: ELSE tail | /* empty */ ; 
- 
-for_statement: FOR LPAREN expression SEMI expression SEMI expression RPAREN tail ;
- 
-tail: statement SEMI | LBRACE statements RBRACE ;
- 
+for_statement: FOR LPAREN assignment conditionals SEMI conditionals RPAREN LBRACE statements RBRACE;
+
+bool_exp : conditionals | ID | TRU | FAL ;
+
+conditionals:
+	expression EQUOPERATOR expression |
+    expression RELOPERATOR expression |
+	NOTOPERATOR expression |
+	expression OROPERATOR expression  |
+	expression ANDOPERATOR expression |
+	ID EQUAL expression 
+
+expressions: expressions expression | ;
 expression:
-    expression ADDOP expression |
-    expression MULOP expression |
-    expression DIVOP expression |
- 
-    expression OROP expression |
-    NOTOP expression |
-    expression EQUOP expression |
-    expression RELOP expression |
+	ICONST |
+	SCONST |
+	TRU |
+	FAL |
+	expression OPERATOR expression |
     LPAREN expression RPAREN |
-    names |
-    sign constant
+	sign ICONST |
+    NOTOPERATOR expression |
+	ID |
+	ID DOT ID
+	
 ;
  
-sign: ADDOP | /* empty */ ; 
-constant: ICONST  ;
-assigment: names EQUAL expression SEMI ; 
+sign: ADDOPERATOR | SUBOPERATOR;
+OPERATOR : ADDOPERATOR | SUBOPERATOR | MULOPERATOR | DIVOPERATOR |MODOPERATOR | ANDOPERATOR | OROPERATOR | NOTOPERATOR | EQUOPERATOR | RELOPERATOR ;
+
  
 %%
  
 void yyerror ()
 {
-  fprintf(stderr, "Syntax error at line %d\n", lineno);
-  exit(1);
+   fprintf(stderr, "Syntax Error at line \n");
 }
- 
+
+
 int main (int argc, char *argv[]){
- 
+
 	// initialize symbol table
 	init_hash_table();
  
@@ -90,9 +132,18 @@ int main (int argc, char *argv[]){
 	fclose(yyin);
  
 	// symbol table dump
-	yyout = fopen("symtab_dump.out", "w");
-	symtab_dump(yyout);
-	fclose(yyout);	
- 
+	yyout = fopen("ToY_dump.out", "w");
+	ToY_dump(yyout);
+	fclose(yyout);
+
+	printf("\n\nProgram: ",flag);
+
+	if(flag == 0){
+		printf("VALID\n\n\n");
+	}
+	else{
+		printf("ERROR\n\n\n");
+	}
+	
 	return flag;
 }

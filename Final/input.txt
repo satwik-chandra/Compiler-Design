@@ -1,2 +1,5 @@
-int x = 7;
-string y = "Lol+-*><"
+int isit(int maybe) {
+    int y;
+    y = bar;
+    return y;
+}

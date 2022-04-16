@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "symtab.h"
+#include "ToY.h"
  
 /* current scope */
 int cur_scope = 0;
@@ -75,7 +75,7 @@ void incr_scope(){ /* go to next scope */
 }
  
 /* print to stdout by default */ 
-void symtab_dump(FILE * of){  
+void ToY_dump(FILE * of){  
   int i;
   fprintf(of,"------------ ------ ------------\n");
   fprintf(of,"Name         Type   Line Numbers\n");
