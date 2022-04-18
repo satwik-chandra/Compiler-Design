@@ -1,0 +1,1975 @@
+Nonterminals useless in grammar
+
+    lexp
+
+
+Rules useless in grammar
+
+   79 lexp: ID
+   80     | ID DOT ID
+   81     | %empty
+
+
+State 28 conflicts: 7 shift/reduce, 1 reduce/reduce
+State 29 conflicts: 7 shift/reduce, 1 reduce/reduce
+State 41 conflicts: 7 shift/reduce, 1 reduce/reduce
+State 44 conflicts: 1 shift/reduce
+State 89 conflicts: 3 shift/reduce
+State 108 conflicts: 3 shift/reduce
+State 114 conflicts: 3 shift/reduce
+State 117 conflicts: 6 shift/reduce
+State 118 conflicts: 6 shift/reduce
+State 119 conflicts: 9 shift/reduce
+State 120 conflicts: 9 shift/reduce
+State 125 conflicts: 10 shift/reduce
+State 138 conflicts: 7 shift/reduce, 1 reduce/reduce
+State 139 conflicts: 7 shift/reduce, 1 reduce/reduce
+State 146 conflicts: 7 shift/reduce, 1 reduce/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: procedure_declarations
+
+    2 procedure_declarations: procedure_declaration procedure_declarations
+    3                       | %empty
+
+    4 procedure_declaration: return_type ID LPAREN declarations_p LBRACE statements RBRACE
+    5                      | return_type ID LPAREN RPAREN LBRACE statements RBRACE
+    6                      | STRUCT ID LBRACE declarations_s
+
+    7 procedure_calls: ID LPAREN expressions RPAREN SEMI
+    8                | ID EQUAL ID LPAREN expressions RPAREN SEMI
+
+    9 type: INTEGER
+   10     | STRING
+   11     | BOOL
+
+   12 declaration: type ID SEMI
+
+   13 declarations_p: declaration_p COMMA declarations_p
+   14               | declaration_p RPAREN
+
+   15 declarations_s: declaration_p COMMA declarations_s
+   16               | declaration_p RBRACE
+
+   17 declaration_p: type ID
+
+   18 statements: statement statements
+   19           | %empty
+
+   20 statement: if_statements
+   21          | for_statement
+   22          | assignment
+   23          | prints
+   24          | declaration
+   25          | procedure_calls
+   26          | RETURN returns SEMI
+
+   27 prints: PRINT LPAREN SCONST RPAREN SEMI
+
+   28 returns: ID
+   29        | ICONST
+   30        | SCONST
+   31        | VOID
+   32        | %empty
+
+   33 return_type: INTEGER
+   34            | STRING
+   35            | BOOL
+   36            | VOID
+
+   37 assignment: ID EQUAL VOID SEMI
+   38           | ID EQUAL expression SEMI
+
+   39 if_statements: if_statements if_statement
+   40              | %empty
+
+   41 if_statement: IF LPAREN bool_exp RPAREN THEN LBRACE statements RBRACE else_part
+
+   42 else_part: ELSE LBRACE statements RBRACE
+   43          | %empty
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI conditionals RPAREN LBRACE statements RBRACE
+
+   45 bool_exp: conditionals
+   46         | ID
+   47         | TRU
+   48         | FAL
+
+   49 conditionals: expression EQUOPERATOR expression
+   50             | expression RELOPERATOR expression
+   51             | NOTOPERATOR expression
+   52             | expression OROPERATOR expression
+   53             | expression ANDOPERATOR expression
+   54             | ID EQUAL expression
+
+   55 expressions: expressions expression
+   56            | %empty
+
+   57 expression: ICONST
+   58           | SCONST
+   59           | TRU
+   60           | FAL
+   61           | expression OPERATOR expression
+   62           | LPAREN expression RPAREN
+   63           | sign ICONST
+   64           | NOTOPERATOR expression
+   65           | ID
+   66           | ID DOT ID
+
+   67 sign: ADDOPERATOR
+   68     | SUBOPERATOR
+
+   69 OPERATOR: ADDOPERATOR
+   70         | SUBOPERATOR
+   71         | MULOPERATOR
+   72         | DIVOPERATOR
+   73         | MODOPERATOR
+   74         | ANDOPERATOR
+   75         | OROPERATOR
+   76         | NOTOPERATOR
+   77         | EQUOPERATOR
+   78         | RELOPERATOR
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    NOTOPERATOR (258) 51 64 76
+    ADDOPERATOR (259) 67 69
+    SUBOPERATOR (260) 68 70
+    RELOPERATOR (261) 50 78
+    EQUAL (262) 8 37 38 54
+    EQUOPERATOR (263) 49 77
+    MULOPERATOR (264) 71
+    DIVOPERATOR (265) 72
+    OROPERATOR (266) 52 75
+    ANDOPERATOR (267) 53 74
+    MODOPERATOR (268) 73
+    INTEGER (269) 9 33
+    IF (270) 41
+    THEN (271) 41
+    ELSE (272) 42
+    FOR (273) 44
+    VOID (274) 31 36 37
+    RETURN (275) 26
+    BOOL (276) 11 35
+    TRU (277) 47 59
+    FAL (278) 48 60
+    STRUCT (279) 6
+    LPAREN (280) 4 5 7 8 27 41 44 62
+    RPAREN (281) 5 7 8 14 27 41 44 62
+    LBRACE (282) 4 5 6 41 42 44
+    RBRACE (283) 4 5 16 41 42 44
+    SEMI (284) 7 8 12 26 27 37 38 44
+    DOT (285) 66
+    COMMA (286) 13 15
+    PRINT (287) 27
+    ID (288) 4 5 6 7 8 12 17 28 37 38 46 54 65 66
+    ICONST (289) 29 57 63
+    STRING (290) 10 34
+    SCONST (291) 27 30 58
+
+
+Nonterminals, with rules where they appear
+
+    $accept (37)
+        on left: 0
+    program (38)
+        on left: 1
+        on right: 0
+    procedure_declarations (39)
+        on left: 2 3
+        on right: 1 2
+    procedure_declaration (40)
+        on left: 4 5 6
+        on right: 2
+    procedure_calls (41)
+        on left: 7 8
+        on right: 25
+    type (42)
+        on left: 9 10 11
+        on right: 12 17
+    declaration (43)
+        on left: 12
+        on right: 24
+    declarations_p (44)
+        on left: 13 14
+        on right: 4 13
+    declarations_s (45)
+        on left: 15 16
+        on right: 6 15
+    declaration_p (46)
+        on left: 17
+        on right: 13 14 15 16
+    statements (47)
+        on left: 18 19
+        on right: 4 5 18 41 42 44
+    statement (48)
+        on left: 20 21 22 23 24 25 26
+        on right: 18
+    prints (49)
+        on left: 27
+        on right: 23
+    returns (50)
+        on left: 28 29 30 31 32
+        on right: 26
+    return_type (51)
+        on left: 33 34 35 36
+        on right: 4 5
+    assignment (52)
+        on left: 37 38
+        on right: 22 44
+    if_statements (53)
+        on left: 39 40
+        on right: 20 39
+    if_statement (54)
+        on left: 41
+        on right: 39
+    else_part (55)
+        on left: 42 43
+        on right: 41
+    for_statement (56)
+        on left: 44
+        on right: 21
+    bool_exp (57)
+        on left: 45 46 47 48
+        on right: 41
+    conditionals (58)
+        on left: 49 50 51 52 53 54
+        on right: 44 45
+    expressions (59)
+        on left: 55 56
+        on right: 7 8 55
+    expression (60)
+        on left: 57 58 59 60 61 62 63 64 65 66
+        on right: 38 49 50 51 52 53 54 55 61 62 64
+    sign (61)
+        on left: 67 68
+        on right: 63
+    OPERATOR (62)
+        on left: 69 70 71 72 73 74 75 76 77 78
+        on right: 61
+
+
+State 0
+
+    0 $accept: . program $end
+
+    INTEGER  shift, and go to state 1
+    VOID     shift, and go to state 2
+    BOOL     shift, and go to state 3
+    STRUCT   shift, and go to state 4
+    STRING   shift, and go to state 5
+
+    $default  reduce using rule 3 (procedure_declarations)
+
+    program                 go to state 6
+    procedure_declarations  go to state 7
+    procedure_declaration   go to state 8
+    return_type             go to state 9
+
+
+State 1
+
+   33 return_type: INTEGER .
+
+    $default  reduce using rule 33 (return_type)
+
+
+State 2
+
+   36 return_type: VOID .
+
+    $default  reduce using rule 36 (return_type)
+
+
+State 3
+
+   35 return_type: BOOL .
+
+    $default  reduce using rule 35 (return_type)
+
+
+State 4
+
+    6 procedure_declaration: STRUCT . ID LBRACE declarations_s
+
+    ID  shift, and go to state 10
+
+
+State 5
+
+   34 return_type: STRING .
+
+    $default  reduce using rule 34 (return_type)
+
+
+State 6
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 11
+
+
+State 7
+
+    1 program: procedure_declarations .
+
+    $default  reduce using rule 1 (program)
+
+
+State 8
+
+    2 procedure_declarations: procedure_declaration . procedure_declarations
+
+    INTEGER  shift, and go to state 1
+    VOID     shift, and go to state 2
+    BOOL     shift, and go to state 3
+    STRUCT   shift, and go to state 4
+    STRING   shift, and go to state 5
+
+    $default  reduce using rule 3 (procedure_declarations)
+
+    procedure_declarations  go to state 12
+    procedure_declaration   go to state 8
+    return_type             go to state 9
+
+
+State 9
+
+    4 procedure_declaration: return_type . ID LPAREN declarations_p LBRACE statements RBRACE
+    5                      | return_type . ID LPAREN RPAREN LBRACE statements RBRACE
+
+    ID  shift, and go to state 13
+
+
+State 10
+
+    6 procedure_declaration: STRUCT ID . LBRACE declarations_s
+
+    LBRACE  shift, and go to state 14
+
+
+State 11
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 12
+
+    2 procedure_declarations: procedure_declaration procedure_declarations .
+
+    $default  reduce using rule 2 (procedure_declarations)
+
+
+State 13
+
+    4 procedure_declaration: return_type ID . LPAREN declarations_p LBRACE statements RBRACE
+    5                      | return_type ID . LPAREN RPAREN LBRACE statements RBRACE
+
+    LPAREN  shift, and go to state 15
+
+
+State 14
+
+    6 procedure_declaration: STRUCT ID LBRACE . declarations_s
+
+    INTEGER  shift, and go to state 16
+    BOOL     shift, and go to state 17
+    STRING   shift, and go to state 18
+
+    type            go to state 19
+    declarations_s  go to state 20
+    declaration_p   go to state 21
+
+
+State 15
+
+    4 procedure_declaration: return_type ID LPAREN . declarations_p LBRACE statements RBRACE
+    5                      | return_type ID LPAREN . RPAREN LBRACE statements RBRACE
+
+    INTEGER  shift, and go to state 16
+    BOOL     shift, and go to state 17
+    RPAREN   shift, and go to state 22
+    STRING   shift, and go to state 18
+
+    type            go to state 19
+    declarations_p  go to state 23
+    declaration_p   go to state 24
+
+
+State 16
+
+    9 type: INTEGER .
+
+    $default  reduce using rule 9 (type)
+
+
+State 17
+
+   11 type: BOOL .
+
+    $default  reduce using rule 11 (type)
+
+
+State 18
+
+   10 type: STRING .
+
+    $default  reduce using rule 10 (type)
+
+
+State 19
+
+   17 declaration_p: type . ID
+
+    ID  shift, and go to state 25
+
+
+State 20
+
+    6 procedure_declaration: STRUCT ID LBRACE declarations_s .
+
+    $default  reduce using rule 6 (procedure_declaration)
+
+
+State 21
+
+   15 declarations_s: declaration_p . COMMA declarations_s
+   16               | declaration_p . RBRACE
+
+    RBRACE  shift, and go to state 26
+    COMMA   shift, and go to state 27
+
+
+State 22
+
+    5 procedure_declaration: return_type ID LPAREN RPAREN . LBRACE statements RBRACE
+
+    LBRACE  shift, and go to state 28
+
+
+State 23
+
+    4 procedure_declaration: return_type ID LPAREN declarations_p . LBRACE statements RBRACE
+
+    LBRACE  shift, and go to state 29
+
+
+State 24
+
+   13 declarations_p: declaration_p . COMMA declarations_p
+   14               | declaration_p . RPAREN
+
+    RPAREN  shift, and go to state 30
+    COMMA   shift, and go to state 31
+
+
+State 25
+
+   17 declaration_p: type ID .
+
+    $default  reduce using rule 17 (declaration_p)
+
+
+State 26
+
+   16 declarations_s: declaration_p RBRACE .
+
+    $default  reduce using rule 16 (declarations_s)
+
+
+State 27
+
+   15 declarations_s: declaration_p COMMA . declarations_s
+
+    INTEGER  shift, and go to state 16
+    BOOL     shift, and go to state 17
+    STRING   shift, and go to state 18
+
+    type            go to state 19
+    declarations_s  go to state 32
+    declaration_p   go to state 21
+
+
+State 28
+
+    5 procedure_declaration: return_type ID LPAREN RPAREN LBRACE . statements RBRACE
+
+    INTEGER  shift, and go to state 16
+    FOR      shift, and go to state 33
+    RETURN   shift, and go to state 34
+    BOOL     shift, and go to state 17
+    PRINT    shift, and go to state 35
+    ID       shift, and go to state 36
+    STRING   shift, and go to state 18
+
+    INTEGER   [reduce using rule 40 (if_statements)]
+    IF        reduce using rule 40 (if_statements)
+    FOR       [reduce using rule 40 (if_statements)]
+    RETURN    [reduce using rule 40 (if_statements)]
+    BOOL      [reduce using rule 40 (if_statements)]
+    RBRACE    reduce using rule 19 (statements)
+    RBRACE    [reduce using rule 40 (if_statements)]
+    PRINT     [reduce using rule 40 (if_statements)]
+    ID        [reduce using rule 40 (if_statements)]
+    STRING    [reduce using rule 40 (if_statements)]
+    $default  reduce using rule 19 (statements)
+
+    procedure_calls  go to state 37
+    type             go to state 38
+    declaration      go to state 39
+    statements       go to state 40
+    statement        go to state 41
+    prints           go to state 42
+    assignment       go to state 43
+    if_statements    go to state 44
+    for_statement    go to state 45
+
+
+State 29
+
+    4 procedure_declaration: return_type ID LPAREN declarations_p LBRACE . statements RBRACE
+
+    INTEGER  shift, and go to state 16
+    FOR      shift, and go to state 33
+    RETURN   shift, and go to state 34
+    BOOL     shift, and go to state 17
+    PRINT    shift, and go to state 35
+    ID       shift, and go to state 36
+    STRING   shift, and go to state 18
+
+    INTEGER   [reduce using rule 40 (if_statements)]
+    IF        reduce using rule 40 (if_statements)
+    FOR       [reduce using rule 40 (if_statements)]
+    RETURN    [reduce using rule 40 (if_statements)]
+    BOOL      [reduce using rule 40 (if_statements)]
+    RBRACE    reduce using rule 19 (statements)
+    RBRACE    [reduce using rule 40 (if_statements)]
+    PRINT     [reduce using rule 40 (if_statements)]
+    ID        [reduce using rule 40 (if_statements)]
+    STRING    [reduce using rule 40 (if_statements)]
+    $default  reduce using rule 19 (statements)
+
+    procedure_calls  go to state 37
+    type             go to state 38
+    declaration      go to state 39
+    statements       go to state 46
+    statement        go to state 41
+    prints           go to state 42
+    assignment       go to state 43
+    if_statements    go to state 44
+    for_statement    go to state 45
+
+
+State 30
+
+   14 declarations_p: declaration_p RPAREN .
+
+    $default  reduce using rule 14 (declarations_p)
+
+
+State 31
+
+   13 declarations_p: declaration_p COMMA . declarations_p
+
+    INTEGER  shift, and go to state 16
+    BOOL     shift, and go to state 17
+    STRING   shift, and go to state 18
+
+    type            go to state 19
+    declarations_p  go to state 47
+    declaration_p   go to state 24
+
+
+State 32
+
+   15 declarations_s: declaration_p COMMA declarations_s .
+
+    $default  reduce using rule 15 (declarations_s)
+
+
+State 33
+
+   44 for_statement: FOR . LPAREN assignment conditionals SEMI conditionals RPAREN LBRACE statements RBRACE
+
+    LPAREN  shift, and go to state 48
+
+
+State 34
+
+   26 statement: RETURN . returns SEMI
+
+    VOID    shift, and go to state 49
+    ID      shift, and go to state 50
+    ICONST  shift, and go to state 51
+    SCONST  shift, and go to state 52
+
+    $default  reduce using rule 32 (returns)
+
+    returns  go to state 53
+
+
+State 35
+
+   27 prints: PRINT . LPAREN SCONST RPAREN SEMI
+
+    LPAREN  shift, and go to state 54
+
+
+State 36
+
+    7 procedure_calls: ID . LPAREN expressions RPAREN SEMI
+    8                | ID . EQUAL ID LPAREN expressions RPAREN SEMI
+   37 assignment: ID . EQUAL VOID SEMI
+   38           | ID . EQUAL expression SEMI
+
+    EQUAL   shift, and go to state 55
+    LPAREN  shift, and go to state 56
+
+
+State 37
+
+   25 statement: procedure_calls .
+
+    $default  reduce using rule 25 (statement)
+
+
+State 38
+
+   12 declaration: type . ID SEMI
+
+    ID  shift, and go to state 57
+
+
+State 39
+
+   24 statement: declaration .
+
+    $default  reduce using rule 24 (statement)
+
+
+State 40
+
+    5 procedure_declaration: return_type ID LPAREN RPAREN LBRACE statements . RBRACE
+
+    RBRACE  shift, and go to state 58
+
+
+State 41
+
+   18 statements: statement . statements
+
+    INTEGER  shift, and go to state 16
+    FOR      shift, and go to state 33
+    RETURN   shift, and go to state 34
+    BOOL     shift, and go to state 17
+    PRINT    shift, and go to state 35
+    ID       shift, and go to state 36
+    STRING   shift, and go to state 18
+
+    INTEGER   [reduce using rule 40 (if_statements)]
+    IF        reduce using rule 40 (if_statements)
+    FOR       [reduce using rule 40 (if_statements)]
+    RETURN    [reduce using rule 40 (if_statements)]
+    BOOL      [reduce using rule 40 (if_statements)]
+    RBRACE    reduce using rule 19 (statements)
+    RBRACE    [reduce using rule 40 (if_statements)]
+    PRINT     [reduce using rule 40 (if_statements)]
+    ID        [reduce using rule 40 (if_statements)]
+    STRING    [reduce using rule 40 (if_statements)]
+    $default  reduce using rule 19 (statements)
+
+    procedure_calls  go to state 37
+    type             go to state 38
+    declaration      go to state 39
+    statements       go to state 59
+    statement        go to state 41
+    prints           go to state 42
+    assignment       go to state 43
+    if_statements    go to state 44
+    for_statement    go to state 45
+
+
+State 42
+
+   23 statement: prints .
+
+    $default  reduce using rule 23 (statement)
+
+
+State 43
+
+   22 statement: assignment .
+
+    $default  reduce using rule 22 (statement)
+
+
+State 44
+
+   20 statement: if_statements .
+   39 if_statements: if_statements . if_statement
+
+    IF  shift, and go to state 60
+
+    IF        [reduce using rule 20 (statement)]
+    $default  reduce using rule 20 (statement)
+
+    if_statement  go to state 61
+
+
+State 45
+
+   21 statement: for_statement .
+
+    $default  reduce using rule 21 (statement)
+
+
+State 46
+
+    4 procedure_declaration: return_type ID LPAREN declarations_p LBRACE statements . RBRACE
+
+    RBRACE  shift, and go to state 62
+
+
+State 47
+
+   13 declarations_p: declaration_p COMMA declarations_p .
+
+    $default  reduce using rule 13 (declarations_p)
+
+
+State 48
+
+   44 for_statement: FOR LPAREN . assignment conditionals SEMI conditionals RPAREN LBRACE statements RBRACE
+
+    ID  shift, and go to state 63
+
+    assignment  go to state 64
+
+
+State 49
+
+   31 returns: VOID .
+
+    $default  reduce using rule 31 (returns)
+
+
+State 50
+
+   28 returns: ID .
+
+    $default  reduce using rule 28 (returns)
+
+
+State 51
+
+   29 returns: ICONST .
+
+    $default  reduce using rule 29 (returns)
+
+
+State 52
+
+   30 returns: SCONST .
+
+    $default  reduce using rule 30 (returns)
+
+
+State 53
+
+   26 statement: RETURN returns . SEMI
+
+    SEMI  shift, and go to state 65
+
+
+State 54
+
+   27 prints: PRINT LPAREN . SCONST RPAREN SEMI
+
+    SCONST  shift, and go to state 66
+
+
+State 55
+
+    8 procedure_calls: ID EQUAL . ID LPAREN expressions RPAREN SEMI
+   37 assignment: ID EQUAL . VOID SEMI
+   38           | ID EQUAL . expression SEMI
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    VOID         shift, and go to state 70
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 74
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 77
+    sign        go to state 78
+
+
+State 56
+
+    7 procedure_calls: ID LPAREN . expressions RPAREN SEMI
+
+    $default  reduce using rule 56 (expressions)
+
+    expressions  go to state 79
+
+
+State 57
+
+   12 declaration: type ID . SEMI
+
+    SEMI  shift, and go to state 80
+
+
+State 58
+
+    5 procedure_declaration: return_type ID LPAREN RPAREN LBRACE statements RBRACE .
+
+    $default  reduce using rule 5 (procedure_declaration)
+
+
+State 59
+
+   18 statements: statement statements .
+
+    $default  reduce using rule 18 (statements)
+
+
+State 60
+
+   41 if_statement: IF . LPAREN bool_exp RPAREN THEN LBRACE statements RBRACE else_part
+
+    LPAREN  shift, and go to state 81
+
+
+State 61
+
+   39 if_statements: if_statements if_statement .
+
+    $default  reduce using rule 39 (if_statements)
+
+
+State 62
+
+    4 procedure_declaration: return_type ID LPAREN declarations_p LBRACE statements RBRACE .
+
+    $default  reduce using rule 4 (procedure_declaration)
+
+
+State 63
+
+   37 assignment: ID . EQUAL VOID SEMI
+   38           | ID . EQUAL expression SEMI
+
+    EQUAL  shift, and go to state 82
+
+
+State 64
+
+   44 for_statement: FOR LPAREN assignment . conditionals SEMI conditionals RPAREN LBRACE statements RBRACE
+
+    NOTOPERATOR  shift, and go to state 83
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 84
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    conditionals  go to state 85
+    expression    go to state 86
+    sign          go to state 78
+
+
+State 65
+
+   26 statement: RETURN returns SEMI .
+
+    $default  reduce using rule 26 (statement)
+
+
+State 66
+
+   27 prints: PRINT LPAREN SCONST . RPAREN SEMI
+
+    RPAREN  shift, and go to state 87
+
+
+State 67
+
+   64 expression: NOTOPERATOR . expression
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 89
+    sign        go to state 78
+
+
+State 68
+
+   67 sign: ADDOPERATOR .
+
+    $default  reduce using rule 67 (sign)
+
+
+State 69
+
+   68 sign: SUBOPERATOR .
+
+    $default  reduce using rule 68 (sign)
+
+
+State 70
+
+   37 assignment: ID EQUAL VOID . SEMI
+
+    SEMI  shift, and go to state 90
+
+
+State 71
+
+   59 expression: TRU .
+
+    $default  reduce using rule 59 (expression)
+
+
+State 72
+
+   60 expression: FAL .
+
+    $default  reduce using rule 60 (expression)
+
+
+State 73
+
+   62 expression: LPAREN . expression RPAREN
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 91
+    sign        go to state 78
+
+
+State 74
+
+    8 procedure_calls: ID EQUAL ID . LPAREN expressions RPAREN SEMI
+   65 expression: ID .
+   66           | ID . DOT ID
+
+    LPAREN  shift, and go to state 92
+    DOT     shift, and go to state 93
+
+    $default  reduce using rule 65 (expression)
+
+
+State 75
+
+   57 expression: ICONST .
+
+    $default  reduce using rule 57 (expression)
+
+
+State 76
+
+   58 expression: SCONST .
+
+    $default  reduce using rule 58 (expression)
+
+
+State 77
+
+   38 assignment: ID EQUAL expression . SEMI
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+    SEMI         shift, and go to state 104
+
+    OPERATOR  go to state 105
+
+
+State 78
+
+   63 expression: sign . ICONST
+
+    ICONST  shift, and go to state 106
+
+
+State 79
+
+    7 procedure_calls: ID LPAREN expressions . RPAREN SEMI
+   55 expressions: expressions . expression
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    RPAREN       shift, and go to state 107
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 108
+    sign        go to state 78
+
+
+State 80
+
+   12 declaration: type ID SEMI .
+
+    $default  reduce using rule 12 (declaration)
+
+
+State 81
+
+   41 if_statement: IF LPAREN . bool_exp RPAREN THEN LBRACE statements RBRACE else_part
+
+    NOTOPERATOR  shift, and go to state 83
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 109
+    FAL          shift, and go to state 110
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 111
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    bool_exp      go to state 112
+    conditionals  go to state 113
+    expression    go to state 86
+    sign          go to state 78
+
+
+State 82
+
+   37 assignment: ID EQUAL . VOID SEMI
+   38           | ID EQUAL . expression SEMI
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    VOID         shift, and go to state 70
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 77
+    sign        go to state 78
+
+
+State 83
+
+   51 conditionals: NOTOPERATOR . expression
+   64 expression: NOTOPERATOR . expression
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 114
+    sign        go to state 78
+
+
+State 84
+
+   54 conditionals: ID . EQUAL expression
+   65 expression: ID .
+   66           | ID . DOT ID
+
+    EQUAL  shift, and go to state 115
+    DOT    shift, and go to state 93
+
+    $default  reduce using rule 65 (expression)
+
+
+State 85
+
+   44 for_statement: FOR LPAREN assignment conditionals . SEMI conditionals RPAREN LBRACE statements RBRACE
+
+    SEMI  shift, and go to state 116
+
+
+State 86
+
+   49 conditionals: expression . EQUOPERATOR expression
+   50             | expression . RELOPERATOR expression
+   52             | expression . OROPERATOR expression
+   53             | expression . ANDOPERATOR expression
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 117
+    EQUOPERATOR  shift, and go to state 118
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 119
+    ANDOPERATOR  shift, and go to state 120
+    MODOPERATOR  shift, and go to state 103
+
+    OPERATOR  go to state 105
+
+
+State 87
+
+   27 prints: PRINT LPAREN SCONST RPAREN . SEMI
+
+    SEMI  shift, and go to state 121
+
+
+State 88
+
+   65 expression: ID .
+   66           | ID . DOT ID
+
+    DOT  shift, and go to state 93
+
+    $default  reduce using rule 65 (expression)
+
+
+State 89
+
+   61 expression: expression . OPERATOR expression
+   64           | NOTOPERATOR expression .
+
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    OROPERATOR   [reduce using rule 64 (expression)]
+    ANDOPERATOR  [reduce using rule 64 (expression)]
+    MODOPERATOR  [reduce using rule 64 (expression)]
+    $default     reduce using rule 64 (expression)
+
+    OPERATOR  go to state 105
+
+
+State 90
+
+   37 assignment: ID EQUAL VOID SEMI .
+
+    $default  reduce using rule 37 (assignment)
+
+
+State 91
+
+   61 expression: expression . OPERATOR expression
+   62           | LPAREN expression . RPAREN
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+    RPAREN       shift, and go to state 122
+
+    OPERATOR  go to state 105
+
+
+State 92
+
+    8 procedure_calls: ID EQUAL ID LPAREN . expressions RPAREN SEMI
+
+    $default  reduce using rule 56 (expressions)
+
+    expressions  go to state 123
+
+
+State 93
+
+   66 expression: ID DOT . ID
+
+    ID  shift, and go to state 124
+
+
+State 94
+
+   76 OPERATOR: NOTOPERATOR .
+
+    $default  reduce using rule 76 (OPERATOR)
+
+
+State 95
+
+   69 OPERATOR: ADDOPERATOR .
+
+    $default  reduce using rule 69 (OPERATOR)
+
+
+State 96
+
+   70 OPERATOR: SUBOPERATOR .
+
+    $default  reduce using rule 70 (OPERATOR)
+
+
+State 97
+
+   78 OPERATOR: RELOPERATOR .
+
+    $default  reduce using rule 78 (OPERATOR)
+
+
+State 98
+
+   77 OPERATOR: EQUOPERATOR .
+
+    $default  reduce using rule 77 (OPERATOR)
+
+
+State 99
+
+   71 OPERATOR: MULOPERATOR .
+
+    $default  reduce using rule 71 (OPERATOR)
+
+
+State 100
+
+   72 OPERATOR: DIVOPERATOR .
+
+    $default  reduce using rule 72 (OPERATOR)
+
+
+State 101
+
+   75 OPERATOR: OROPERATOR .
+
+    $default  reduce using rule 75 (OPERATOR)
+
+
+State 102
+
+   74 OPERATOR: ANDOPERATOR .
+
+    $default  reduce using rule 74 (OPERATOR)
+
+
+State 103
+
+   73 OPERATOR: MODOPERATOR .
+
+    $default  reduce using rule 73 (OPERATOR)
+
+
+State 104
+
+   38 assignment: ID EQUAL expression SEMI .
+
+    $default  reduce using rule 38 (assignment)
+
+
+State 105
+
+   61 expression: expression OPERATOR . expression
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 125
+    sign        go to state 78
+
+
+State 106
+
+   63 expression: sign ICONST .
+
+    $default  reduce using rule 63 (expression)
+
+
+State 107
+
+    7 procedure_calls: ID LPAREN expressions RPAREN . SEMI
+
+    SEMI  shift, and go to state 126
+
+
+State 108
+
+   55 expressions: expressions expression .
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    NOTOPERATOR  [reduce using rule 55 (expressions)]
+    ADDOPERATOR  [reduce using rule 55 (expressions)]
+    SUBOPERATOR  [reduce using rule 55 (expressions)]
+    $default     reduce using rule 55 (expressions)
+
+    OPERATOR  go to state 105
+
+
+State 109
+
+   47 bool_exp: TRU .
+   59 expression: TRU .
+
+    RPAREN    reduce using rule 47 (bool_exp)
+    $default  reduce using rule 59 (expression)
+
+
+State 110
+
+   48 bool_exp: FAL .
+   60 expression: FAL .
+
+    RPAREN    reduce using rule 48 (bool_exp)
+    $default  reduce using rule 60 (expression)
+
+
+State 111
+
+   46 bool_exp: ID .
+   54 conditionals: ID . EQUAL expression
+   65 expression: ID .
+   66           | ID . DOT ID
+
+    EQUAL  shift, and go to state 115
+    DOT    shift, and go to state 93
+
+    RPAREN    reduce using rule 46 (bool_exp)
+    $default  reduce using rule 65 (expression)
+
+
+State 112
+
+   41 if_statement: IF LPAREN bool_exp . RPAREN THEN LBRACE statements RBRACE else_part
+
+    RPAREN  shift, and go to state 127
+
+
+State 113
+
+   45 bool_exp: conditionals .
+
+    $default  reduce using rule 45 (bool_exp)
+
+
+State 114
+
+   51 conditionals: NOTOPERATOR expression .
+   61 expression: expression . OPERATOR expression
+   64           | NOTOPERATOR expression .
+
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    OROPERATOR   [reduce using rule 64 (expression)]
+    ANDOPERATOR  [reduce using rule 64 (expression)]
+    MODOPERATOR  [reduce using rule 64 (expression)]
+    RPAREN       reduce using rule 51 (conditionals)
+    SEMI         reduce using rule 51 (conditionals)
+    $default     reduce using rule 64 (expression)
+
+    OPERATOR  go to state 105
+
+
+State 115
+
+   54 conditionals: ID EQUAL . expression
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 128
+    sign        go to state 78
+
+
+State 116
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI . conditionals RPAREN LBRACE statements RBRACE
+
+    NOTOPERATOR  shift, and go to state 83
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 84
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    conditionals  go to state 129
+    expression    go to state 86
+    sign          go to state 78
+
+
+State 117
+
+   50 conditionals: expression RELOPERATOR . expression
+   78 OPERATOR: RELOPERATOR .
+
+    TRU     shift, and go to state 71
+    FAL     shift, and go to state 72
+    LPAREN  shift, and go to state 73
+    ID      shift, and go to state 88
+    ICONST  shift, and go to state 75
+    SCONST  shift, and go to state 76
+
+    TRU       [reduce using rule 78 (OPERATOR)]
+    FAL       [reduce using rule 78 (OPERATOR)]
+    LPAREN    [reduce using rule 78 (OPERATOR)]
+    ID        [reduce using rule 78 (OPERATOR)]
+    ICONST    [reduce using rule 78 (OPERATOR)]
+    SCONST    [reduce using rule 78 (OPERATOR)]
+    $default  reduce using rule 78 (OPERATOR)
+
+    expression  go to state 130
+    sign        go to state 78
+
+
+State 118
+
+   49 conditionals: expression EQUOPERATOR . expression
+   77 OPERATOR: EQUOPERATOR .
+
+    TRU     shift, and go to state 71
+    FAL     shift, and go to state 72
+    LPAREN  shift, and go to state 73
+    ID      shift, and go to state 88
+    ICONST  shift, and go to state 75
+    SCONST  shift, and go to state 76
+
+    TRU       [reduce using rule 77 (OPERATOR)]
+    FAL       [reduce using rule 77 (OPERATOR)]
+    LPAREN    [reduce using rule 77 (OPERATOR)]
+    ID        [reduce using rule 77 (OPERATOR)]
+    ICONST    [reduce using rule 77 (OPERATOR)]
+    SCONST    [reduce using rule 77 (OPERATOR)]
+    $default  reduce using rule 77 (OPERATOR)
+
+    expression  go to state 131
+    sign        go to state 78
+
+
+State 119
+
+   52 conditionals: expression OROPERATOR . expression
+   75 OPERATOR: OROPERATOR .
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    NOTOPERATOR  [reduce using rule 75 (OPERATOR)]
+    ADDOPERATOR  [reduce using rule 75 (OPERATOR)]
+    SUBOPERATOR  [reduce using rule 75 (OPERATOR)]
+    TRU          [reduce using rule 75 (OPERATOR)]
+    FAL          [reduce using rule 75 (OPERATOR)]
+    LPAREN       [reduce using rule 75 (OPERATOR)]
+    ID           [reduce using rule 75 (OPERATOR)]
+    ICONST       [reduce using rule 75 (OPERATOR)]
+    SCONST       [reduce using rule 75 (OPERATOR)]
+
+    expression  go to state 132
+    sign        go to state 78
+
+
+State 120
+
+   53 conditionals: expression ANDOPERATOR . expression
+   74 OPERATOR: ANDOPERATOR .
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    NOTOPERATOR  [reduce using rule 74 (OPERATOR)]
+    ADDOPERATOR  [reduce using rule 74 (OPERATOR)]
+    SUBOPERATOR  [reduce using rule 74 (OPERATOR)]
+    TRU          [reduce using rule 74 (OPERATOR)]
+    FAL          [reduce using rule 74 (OPERATOR)]
+    LPAREN       [reduce using rule 74 (OPERATOR)]
+    ID           [reduce using rule 74 (OPERATOR)]
+    ICONST       [reduce using rule 74 (OPERATOR)]
+    SCONST       [reduce using rule 74 (OPERATOR)]
+
+    expression  go to state 133
+    sign        go to state 78
+
+
+State 121
+
+   27 prints: PRINT LPAREN SCONST RPAREN SEMI .
+
+    $default  reduce using rule 27 (prints)
+
+
+State 122
+
+   62 expression: LPAREN expression RPAREN .
+
+    $default  reduce using rule 62 (expression)
+
+
+State 123
+
+    8 procedure_calls: ID EQUAL ID LPAREN expressions . RPAREN SEMI
+   55 expressions: expressions . expression
+
+    NOTOPERATOR  shift, and go to state 67
+    ADDOPERATOR  shift, and go to state 68
+    SUBOPERATOR  shift, and go to state 69
+    TRU          shift, and go to state 71
+    FAL          shift, and go to state 72
+    LPAREN       shift, and go to state 73
+    RPAREN       shift, and go to state 134
+    ID           shift, and go to state 88
+    ICONST       shift, and go to state 75
+    SCONST       shift, and go to state 76
+
+    expression  go to state 108
+    sign        go to state 78
+
+
+State 124
+
+   66 expression: ID DOT ID .
+
+    $default  reduce using rule 66 (expression)
+
+
+State 125
+
+   61 expression: expression . OPERATOR expression
+   61           | expression OPERATOR expression .
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    NOTOPERATOR  [reduce using rule 61 (expression)]
+    ADDOPERATOR  [reduce using rule 61 (expression)]
+    SUBOPERATOR  [reduce using rule 61 (expression)]
+    RELOPERATOR  [reduce using rule 61 (expression)]
+    EQUOPERATOR  [reduce using rule 61 (expression)]
+    MULOPERATOR  [reduce using rule 61 (expression)]
+    DIVOPERATOR  [reduce using rule 61 (expression)]
+    OROPERATOR   [reduce using rule 61 (expression)]
+    ANDOPERATOR  [reduce using rule 61 (expression)]
+    MODOPERATOR  [reduce using rule 61 (expression)]
+    $default     reduce using rule 61 (expression)
+
+    OPERATOR  go to state 105
+
+
+State 126
+
+    7 procedure_calls: ID LPAREN expressions RPAREN SEMI .
+
+    $default  reduce using rule 7 (procedure_calls)
+
+
+State 127
+
+   41 if_statement: IF LPAREN bool_exp RPAREN . THEN LBRACE statements RBRACE else_part
+
+    THEN  shift, and go to state 135
+
+
+State 128
+
+   54 conditionals: ID EQUAL expression .
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    $default  reduce using rule 54 (conditionals)
+
+    OPERATOR  go to state 105
+
+
+State 129
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI conditionals . RPAREN LBRACE statements RBRACE
+
+    RPAREN  shift, and go to state 136
+
+
+State 130
+
+   50 conditionals: expression RELOPERATOR expression .
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    $default  reduce using rule 50 (conditionals)
+
+    OPERATOR  go to state 105
+
+
+State 131
+
+   49 conditionals: expression EQUOPERATOR expression .
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    $default  reduce using rule 49 (conditionals)
+
+    OPERATOR  go to state 105
+
+
+State 132
+
+   52 conditionals: expression OROPERATOR expression .
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    $default  reduce using rule 52 (conditionals)
+
+    OPERATOR  go to state 105
+
+
+State 133
+
+   53 conditionals: expression ANDOPERATOR expression .
+   61 expression: expression . OPERATOR expression
+
+    NOTOPERATOR  shift, and go to state 94
+    ADDOPERATOR  shift, and go to state 95
+    SUBOPERATOR  shift, and go to state 96
+    RELOPERATOR  shift, and go to state 97
+    EQUOPERATOR  shift, and go to state 98
+    MULOPERATOR  shift, and go to state 99
+    DIVOPERATOR  shift, and go to state 100
+    OROPERATOR   shift, and go to state 101
+    ANDOPERATOR  shift, and go to state 102
+    MODOPERATOR  shift, and go to state 103
+
+    $default  reduce using rule 53 (conditionals)
+
+    OPERATOR  go to state 105
+
+
+State 134
+
+    8 procedure_calls: ID EQUAL ID LPAREN expressions RPAREN . SEMI
+
+    SEMI  shift, and go to state 137
+
+
+State 135
+
+   41 if_statement: IF LPAREN bool_exp RPAREN THEN . LBRACE statements RBRACE else_part
+
+    LBRACE  shift, and go to state 138
+
+
+State 136
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI conditionals RPAREN . LBRACE statements RBRACE
+
+    LBRACE  shift, and go to state 139
+
+
+State 137
+
+    8 procedure_calls: ID EQUAL ID LPAREN expressions RPAREN SEMI .
+
+    $default  reduce using rule 8 (procedure_calls)
+
+
+State 138
+
+   41 if_statement: IF LPAREN bool_exp RPAREN THEN LBRACE . statements RBRACE else_part
+
+    INTEGER  shift, and go to state 16
+    FOR      shift, and go to state 33
+    RETURN   shift, and go to state 34
+    BOOL     shift, and go to state 17
+    PRINT    shift, and go to state 35
+    ID       shift, and go to state 36
+    STRING   shift, and go to state 18
+
+    INTEGER   [reduce using rule 40 (if_statements)]
+    IF        reduce using rule 40 (if_statements)
+    FOR       [reduce using rule 40 (if_statements)]
+    RETURN    [reduce using rule 40 (if_statements)]
+    BOOL      [reduce using rule 40 (if_statements)]
+    RBRACE    reduce using rule 19 (statements)
+    RBRACE    [reduce using rule 40 (if_statements)]
+    PRINT     [reduce using rule 40 (if_statements)]
+    ID        [reduce using rule 40 (if_statements)]
+    STRING    [reduce using rule 40 (if_statements)]
+    $default  reduce using rule 19 (statements)
+
+    procedure_calls  go to state 37
+    type             go to state 38
+    declaration      go to state 39
+    statements       go to state 140
+    statement        go to state 41
+    prints           go to state 42
+    assignment       go to state 43
+    if_statements    go to state 44
+    for_statement    go to state 45
+
+
+State 139
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI conditionals RPAREN LBRACE . statements RBRACE
+
+    INTEGER  shift, and go to state 16
+    FOR      shift, and go to state 33
+    RETURN   shift, and go to state 34
+    BOOL     shift, and go to state 17
+    PRINT    shift, and go to state 35
+    ID       shift, and go to state 36
+    STRING   shift, and go to state 18
+
+    INTEGER   [reduce using rule 40 (if_statements)]
+    IF        reduce using rule 40 (if_statements)
+    FOR       [reduce using rule 40 (if_statements)]
+    RETURN    [reduce using rule 40 (if_statements)]
+    BOOL      [reduce using rule 40 (if_statements)]
+    RBRACE    reduce using rule 19 (statements)
+    RBRACE    [reduce using rule 40 (if_statements)]
+    PRINT     [reduce using rule 40 (if_statements)]
+    ID        [reduce using rule 40 (if_statements)]
+    STRING    [reduce using rule 40 (if_statements)]
+    $default  reduce using rule 19 (statements)
+
+    procedure_calls  go to state 37
+    type             go to state 38
+    declaration      go to state 39
+    statements       go to state 141
+    statement        go to state 41
+    prints           go to state 42
+    assignment       go to state 43
+    if_statements    go to state 44
+    for_statement    go to state 45
+
+
+State 140
+
+   41 if_statement: IF LPAREN bool_exp RPAREN THEN LBRACE statements . RBRACE else_part
+
+    RBRACE  shift, and go to state 142
+
+
+State 141
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI conditionals RPAREN LBRACE statements . RBRACE
+
+    RBRACE  shift, and go to state 143
+
+
+State 142
+
+   41 if_statement: IF LPAREN bool_exp RPAREN THEN LBRACE statements RBRACE . else_part
+
+    ELSE  shift, and go to state 144
+
+    $default  reduce using rule 43 (else_part)
+
+    else_part  go to state 145
+
+
+State 143
+
+   44 for_statement: FOR LPAREN assignment conditionals SEMI conditionals RPAREN LBRACE statements RBRACE .
+
+    $default  reduce using rule 44 (for_statement)
+
+
+State 144
+
+   42 else_part: ELSE . LBRACE statements RBRACE
+
+    LBRACE  shift, and go to state 146
+
+
+State 145
+
+   41 if_statement: IF LPAREN bool_exp RPAREN THEN LBRACE statements RBRACE else_part .
+
+    $default  reduce using rule 41 (if_statement)
+
+
+State 146
+
+   42 else_part: ELSE LBRACE . statements RBRACE
+
+    INTEGER  shift, and go to state 16
+    FOR      shift, and go to state 33
+    RETURN   shift, and go to state 34
+    BOOL     shift, and go to state 17
+    PRINT    shift, and go to state 35
+    ID       shift, and go to state 36
+    STRING   shift, and go to state 18
+
+    INTEGER   [reduce using rule 40 (if_statements)]
+    IF        reduce using rule 40 (if_statements)
+    FOR       [reduce using rule 40 (if_statements)]
+    RETURN    [reduce using rule 40 (if_statements)]
+    BOOL      [reduce using rule 40 (if_statements)]
+    RBRACE    reduce using rule 19 (statements)
+    RBRACE    [reduce using rule 40 (if_statements)]
+    PRINT     [reduce using rule 40 (if_statements)]
+    ID        [reduce using rule 40 (if_statements)]
+    STRING    [reduce using rule 40 (if_statements)]
+    $default  reduce using rule 19 (statements)
+
+    procedure_calls  go to state 37
+    type             go to state 38
+    declaration      go to state 39
+    statements       go to state 147
+    statement        go to state 41
+    prints           go to state 42
+    assignment       go to state 43
+    if_statements    go to state 44
+    for_statement    go to state 45
+
+
+State 147
+
+   42 else_part: ELSE LBRACE statements . RBRACE
+
+    RBRACE  shift, and go to state 148
+
+
+State 148
+
+   42 else_part: ELSE LBRACE statements RBRACE .
+
+    $default  reduce using rule 42 (else_part)
