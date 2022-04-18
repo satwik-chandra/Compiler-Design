@@ -43,12 +43,11 @@ procedure_declaration:
 	STRUCT ID LBRACE declarations_s 
 ;
 
-procedure_calls: 
-	ID LPAREN expressions RPAREN SEMI | 
-	ID EQUAL ID LPAREN expressions RPAREN SEMI 
-;
-
-type: INTEGER | STRING | BOOL;
+statements: statement statements | ;
+ 
+statement:
+	if_statements | for_statement | assignment | prints | declaration | procedure_calls
+	| RETURN returns SEMI 
 
 declaration: type ID SEMI;
 
@@ -57,11 +56,30 @@ declarations_s: declaration_p COMMA declarations_s | declaration_p RBRACE;
 
 declaration_p: type ID;
 
-statements: statement statements | ;
+
+procedure_calls: 
+	ID LPAREN expressions RPAREN SEMI | 
+	ID EQUAL ID LPAREN expressions RPAREN SEMI 
+;
+
+
+expressions: expressions expression | ;
+expression:
+	ICONST |
+	SCONST |
+	TRU |
+	FAL |
+	expression OPERATOR expression |
+    LPAREN expression RPAREN |
+	sign ICONST |
+    NOTOPERATOR expression |
+	ID |
+	ID DOT ID
+	
+;
  
-statement:
-	if_statements | for_statement | assignment | prints | declaration | procedure_calls
-	| RETURN returns SEMI 
+
+type: INTEGER | STRING | BOOL;
 
 prints: PRINT LPAREN SCONST RPAREN SEMI ;
 
@@ -93,21 +111,6 @@ conditionals:
 	expression ANDOPERATOR expression |
 	ID EQUAL expression 
 
-expressions: expressions expression | ;
-expression:
-	ICONST |
-	SCONST |
-	TRU |
-	FAL |
-	expression OPERATOR expression |
-    LPAREN expression RPAREN |
-	sign ICONST |
-    NOTOPERATOR expression |
-	ID |
-	ID DOT ID
-	
-;
- 
 sign: ADDOPERATOR | SUBOPERATOR;
 OPERATOR : ADDOPERATOR | SUBOPERATOR | MULOPERATOR | DIVOPERATOR |MODOPERATOR | ANDOPERATOR | OROPERATOR | NOTOPERATOR | EQUOPERATOR | RELOPERATOR ;
 

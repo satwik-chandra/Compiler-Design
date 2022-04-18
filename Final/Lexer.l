@@ -23,7 +23,7 @@ Integer   		  {Int}|{DecInt}|{MinusInt}
 Comment    	   	  ([//]|[##])
 
 LineTerminator    \r|\n|\r\n
-WhiteSpace        [\t\f]
+WhiteSpace        [ \t\f]
 
 Alpha 			  [a-zA-Z_]
 Alnum			  {Alpha}|{Int}
